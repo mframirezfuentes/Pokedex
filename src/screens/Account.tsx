@@ -1,11 +1,15 @@
-import React from 'react'
-import {SafeAreaView, Text} from 'react-native'
-import PokemonList from '../components/PokemonList'
+import React from "react";
+import { View, Text } from "react-native";
+
+import LoginForm from "../components/Auth/LoginForm";
+import UserData from "../components/Auth/userData";
 
 export const Account = () => {
+  const auth = null;
+
   return (
-  <SafeAreaView>
-    <PokemonList/>
-  </SafeAreaView>
-  )
-}
+    <View>
+      {auth ? <UserData/> :<LoginForm/>}
+    </View>
+  );
+};
