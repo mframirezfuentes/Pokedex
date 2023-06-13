@@ -6,18 +6,31 @@ import {
   Button,
   Keyboard,
 } from "react-native";
-import React from "react";
+import React, {useState} from "react";
 
 import { useFormik } from "formik";
 import * as Yup from "yup";
 
+import { user, userDetails } from "../../utils/userDB";
+import useAuth from "../../hooks/useAuth";
+
 export default function LoginForm() {
+const [error, setError] = useState("")
+const {login}= useAuth()
+
   const formik = useFormik({
     initialValues: initialValues(),
     validationSchema: Yup.object(validationSchema()),
-    validateOnChange:false,
+    validateOnChange: false,
     onSubmit: (formValue) => {
-      console.log("Formulario enviado: ", formValue);
+      setError("")
+      const { username, password } = formValue;
+      if (username !== user.username || password !== user.password) {
+        setError("el usuario o la contraseña no son correctos")
+      }else{
+        setError("")
+       login(userDetails)
+      }
     },
   });
 
@@ -42,6 +55,7 @@ export default function LoginForm() {
 
       <Text style={styles.errors}>{formik.errors.username}</Text>
       <Text style={styles.errors}>{formik.errors.password}</Text>
+      <Text style={styles.errors}>{error}</Text>
     </View>
   );
 }
@@ -53,11 +67,14 @@ function initialValues() {
   };
 }
 
-function validationSchema(){
-  return{
+function validationSchema() {
+  return {
     username: Yup.string().required("El usuario es obligatorio"),
-    password: Yup.string().required("La Contraseña es obligatoria").min(3).max(20)
-  }
+    password: Yup.string()
+      .required("La Contraseña es obligatoria")
+      .min(3)
+      .max(20),
+  };
 }
 
 const styles = StyleSheet.create({
@@ -75,10 +92,9 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 10,
   },
-  errors:{
+  errors: {
     textAlign: "center",
     color: "#f00",
     marginTop: 20,
-  }
-
+  },
 });
