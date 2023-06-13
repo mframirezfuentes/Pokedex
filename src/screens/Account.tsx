@@ -2,7 +2,7 @@ import React from "react";
 import { View, Text } from "react-native";
 
 import LoginForm from "../components/Auth/LoginForm";
-import UserData from "../components/Auth/userData";
+import UserData from "../components/Auth/UserData"
 
 export const Account = () => {
   const auth = null;
